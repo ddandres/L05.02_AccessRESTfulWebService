@@ -4,11 +4,11 @@
 
 package labs.sdm.l0502_accessrestfulwebservice;
 
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -109,7 +109,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         }
 
         /*
-        * Accesses the web service on background to get the weather ta the input city
+        * Accesses the web service on background to get the weather to the input city
         * */
         @Override
         protected WeatherPOJO doInBackground(String... params) {
@@ -184,7 +184,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                 tvDescription.setText(result.getWeather().get(0).getDescription());
                 // Update the icon representing the current weather:
                 // http://openweathermap.org/weather-conditions
-                Drawable icon = null;
+                int icon = R.drawable.w01d;
                 switch (result.getWeather().get(0).getId()) {
 
                     // Thunderstorm
@@ -198,7 +198,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     case 230:
                     case 231:
                     case 232:
-                        icon = getResources().getDrawable(R.drawable.w11d);
+                        icon = R.drawable.w11d;
                         break;
 
                     // Shower rain
@@ -215,7 +215,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     case 521:
                     case 522:
                     case 531:
-                        icon = getResources().getDrawable(R.drawable.w09d);
+                        icon = R.drawable.w09d;
                         break;
 
                     // Rain
@@ -224,7 +224,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     case 502:
                     case 503:
                     case 504:
-                        icon = getResources().getDrawable(R.drawable.w10d);
+                        icon = R.drawable.w10d;
                         break;
 
                     // Snow
@@ -239,7 +239,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     case 620:
                     case 621:
                     case 622:
-                        icon = getResources().getDrawable(R.drawable.w13d);
+                        icon = R.drawable.w13d;
                         break;
 
                     // Mist
@@ -253,31 +253,35 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     case 762:
                     case 771:
                     case 781:
-                        icon = getResources().getDrawable(R.drawable.w50d);
+                        icon = R.drawable.w50d;
                         break;
 
                     // Clear sky
                     case 800:
-                        icon = getResources().getDrawable(R.drawable.w01d);
+                        icon = R.drawable.w01d;
                         break;
 
                     // Few clouds
                     case 801:
-                        icon = getResources().getDrawable(R.drawable.w02d);
+                        icon = R.drawable.w02d;
                         break;
 
                     // Scattered clouds
                     case 802:
-                        icon = getResources().getDrawable(R.drawable.w03d);
+                        icon = R.drawable.w03d;
                         break;
 
                     // Broken clouds
                     case 803:
                     case 804:
-                        icon = getResources().getDrawable(R.drawable.w04d);
+                        icon = R.drawable.w04d;
                         break;
                 }
-                ivIcon.setImageDrawable(icon);
+                if (Build.VERSION.SDK_INT > 20) {
+                    ivIcon.setImageDrawable(getResources().getDrawable(icon, null));
+                } else {
+                    ivIcon.setImageDrawable(getResources().getDrawable(icon));
+                }
             }
             // Notify the user that the request could not be completed,
             // probably the name of the city was wrong
