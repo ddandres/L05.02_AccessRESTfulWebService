@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -48,24 +50,29 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_restful_weather);
 
         // Keep a reference to all View objects
-        etCity = (EditText) findViewById(R.id.etWeather);
-        pbConnecting = (ProgressBar) findViewById(R.id.pbConnecting);
-        tvTemperature = (TextView) findViewById(R.id.tvWeatherTemperature);
-        tvDescription = (TextView) findViewById(R.id.tvWeatherDescription);
-        ivIcon = (ImageView) findViewById(R.id.ivWeatherIcon);
-        bCheckWeather = (Button) findViewById(R.id.bWeather);
+        etCity = findViewById(R.id.etWeather);
+        pbConnecting = findViewById(R.id.pbConnecting);
+        tvTemperature = findViewById(R.id.tvWeatherTemperature);
+        tvDescription = findViewById(R.id.tvWeatherDescription);
+        ivIcon = findViewById(R.id.ivWeatherIcon);
+        bCheckWeather = findViewById(R.id.bWeather);
     }
 
     /*
     * Handles the event to get the weather.
     * */
     public void getWeather(View v) {
+
+        // Hide the soft keyboard
+        final InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
         // Check that something has been entered as city name
         if (!etCity.getText().toString().isEmpty()) {
             // Check that network connectivity exists
             if (isConnected()) {
                 // Launch the AsyncTask in charge of accessing the web service
-                new WeatherTask().execute(etCity.getText().toString());
+                new WeatherTask(this).execute(etCity.getText().toString());
             }
             // Notify the user that the device has not got Internet connection
             else {
@@ -95,17 +102,23 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     * The input parameter is a String in the format "city" or "city,country_code".
     * The output parameter is a WeatherPOJO object containing the response from the web service.
     * */
-    private class WeatherTask extends AsyncTask<String, Void, WeatherPOJO> {
+    private static class WeatherTask extends AsyncTask<String, Void, WeatherPOJO> {
+
+        WeakReference<RestfulWeatherActivity> activity;
+
+        WeatherTask(RestfulWeatherActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
 
         /*
-        * Updates the UI before starting the background task
-        * */
+         * Updates the UI before starting the background task
+         * */
         @Override
         protected void onPreExecute() {
             // Displays an indeterminate ProgressBar to show that an operation is in progress
-            pbConnecting.setVisibility(View.VISIBLE);
+            this.activity.get().pbConnecting.setVisibility(View.VISIBLE);
             // Disable the button so the user cannot launch multiple requests
-            bCheckWeather.setEnabled(false);
+            this.activity.get().bCheckWeather.setEnabled(false);
         }
 
         /*
@@ -179,9 +192,10 @@ public class RestfulWeatherActivity extends AppCompatActivity {
             * */
             if ((result != null) && (result.getCod() == 200)) {
                 // Update the temperature
-                tvTemperature.setText(String.format(getResources().getString(R.string.temperature), result.getMain().getTemp()));
+                this.activity.get().tvTemperature.setText(String.format(
+                        this.activity.get().getString(R.string.temperature), result.getMain().getTemp()));
                 // Update the description of the current weather
-                tvDescription.setText(result.getWeather().get(0).getDescription());
+                this.activity.get().tvDescription.setText(result.getWeather().get(0).getDescription());
                 // Update the icon representing the current weather:
                 // http://openweathermap.org/weather-conditions
                 int icon = R.drawable.w01d;
@@ -277,26 +291,27 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                         icon = R.drawable.w04d;
                         break;
                 }
-                if (Build.VERSION.SDK_INT > 20) {
-                    ivIcon.setImageDrawable(getResources().getDrawable(icon, null));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    this.activity.get().ivIcon.setImageDrawable(this.activity.get().getResources().getDrawable(icon, null));
                 } else {
-                    ivIcon.setImageDrawable(getResources().getDrawable(icon));
+                    this.activity.get().ivIcon.setImageDrawable(this.activity.get().getResources().getDrawable(icon));
                 }
             }
             // Notify the user that the request could not be completed,
             // probably the name of the city was wrong
             else {
                 Toast.makeText(
-                        RestfulWeatherActivity.this,
-                        getResources().getString(R.string.not_found),
+                        this.activity.get(),
+                        this.activity.get().getString(R.string.not_found),
                         Toast.LENGTH_SHORT).show();
             }
 
 
             // Hides the indeterminate ProgressBar as the operation has finished
-            pbConnecting.setVisibility(View.INVISIBLE);
+            this.activity.get().pbConnecting.setVisibility(View.INVISIBLE);
             // Enable the button so the user cann launch another request
-            bCheckWeather.setEnabled(true);
+            this.activity.get().bCheckWeather.setEnabled(true);
         }
 
     }

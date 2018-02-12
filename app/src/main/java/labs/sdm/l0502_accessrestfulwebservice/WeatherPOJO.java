@@ -25,255 +25,284 @@ import java.util.ArrayList;
 */
 public class WeatherPOJO {
 
-	private Coordinates coord;
-	private System sys;
-	private ArrayList<WeatherItem> weather;
-	private String base;
-	private Main main;
-	private Wind wind;
-	private Clouds clouds;
-	private int dt;
-	private int id;
-	private String name;
-	private int cod;
-	
-	class Coordinates {
-		private double lon;
-		private double lat;
-		
-		public double getLon() {
-			return lon;
-		}
-		public void setLon(double lon) {
-			this.lon = lon;
-		}
-		public double getLat() {
-			return lat;
-		}
-		public void setLat(double lat) {
-			this.lat = lat;
-		}
-	}
-	
-	class System {
-		private String country;
-		private int sunrise;
-		private int sunset;
-		
-		public String getCountry() {
-			return country;
-		}
-		public void setCountry(String country) {
-			this.country = country;
-		}
-		public int getSunrise() {
-			return sunrise;
-		}
-		public void setSunrise(int sunrise) {
-			this.sunrise = sunrise;
-		}
-		public int getSunset() {
-			return sunset;
-		}
-		public void setSunset(int sunset) {
-			this.sunset = sunset;
-		}
-	}
-	
-	class WeatherItem {
-		private int id;
-		private String main;
-		private String description;
-		private String icon;
-		
-		public int getId() {
-			return id;
-		}
-		public void setId(int id) {
-			this.id = id;
-		}
-		public String getMain() {
-			return main;
-		}
-		public void setMain(String main) {
-			this.main = main;
-		}
-		public String getDescription() {
-			return description;
-		}
-		public void setDescription(String description) {
-			this.description = description;
-		}
-		public String getIcon() {
-			return icon;
-		}
-		public void setIcon(String icon) {
-			this.icon = icon;
-		}
-	}
-	
-	class Main {
-		private double temp;
-		private double humidity;
-		private double pressure;
-		private double temp_min;
-		private double temp_max;
-		
-		public double getTemp() {
-			return temp;
-		}
-		public void setTemp(double temp) {
-			this.temp = temp;
-		}
-		public double getHumidity() {
-			return humidity;
-		}
-		public void setHumidity(double humidity) {
-			this.humidity = humidity;
-		}
-		public double getPressure() {
-			return pressure;
-		}
-		public void setPressure(double pressure) {
-			this.pressure = pressure;
-		}
-		public double getTemp_min() {
-			return temp_min;
-		}
-		public void setTemp_min(double temp_min) {
-			this.temp_min = temp_min;
-		}
-		public double getTemp_max() {
-			return temp_max;
-		}
-		public void setTemp_max(double temp_max) {
-			this.temp_max = temp_max;
-		}
-	}
-	
-	class Wind {
-		private double speed;
-		private double gust;
-		private double deg;
-		
-		public double getSpeed() {
-			return speed;
-		}
-		public void setSpeed(double speed) {
-			this.speed = speed;
-		}
-		public double getGust() {
-			return gust;
-		}
-		public void setGust(double gust) {
-			this.gust = gust;
-		}
-		public double getDeg() {
-			return deg;
-		}
-		public void setDeg(double deg) {
-			this.deg = deg;
-		}
-	}
-	
-	class Clouds {
-		
-		private int all;
+    private Coordinates coord;
+    private System sys;
+    private ArrayList<WeatherItem> weather;
+    private String base;
+    private Main main;
+    private Wind wind;
+    private Clouds clouds;
+    private int dt;
+    private int id;
+    private String name;
+    private int cod;
 
-		public int getAll() {
-			return all;
-		}
+    class Coordinates {
+        private double lon;
+        private double lat;
 
-		public void setAll(int all) {
-			this.all = all;
-		}
-	}
+        public double getLon() {
+            return lon;
+        }
 
-	public Coordinates getCoord() {
-		return coord;
-	}
+        public void setLon(double lon) {
+            this.lon = lon;
+        }
 
-	public void setCoord(Coordinates coord) {
-		this.coord = coord;
-	}
+        public double getLat() {
+            return lat;
+        }
 
-	public System getSys() {
-		return sys;
-	}
+        public void setLat(double lat) {
+            this.lat = lat;
+        }
+    }
 
-	public void setSys(System sys) {
-		this.sys = sys;
-	}
+    class System {
+        private String country;
+        private int sunrise;
+        private int sunset;
 
-	public ArrayList<WeatherItem> getWeather() {
-		return weather;
-	}
+        public String getCountry() {
+            return country;
+        }
 
-	public void setWeather(ArrayList<WeatherItem> weather) {
-		this.weather = weather;
-	}
+        public void setCountry(String country) {
+            this.country = country;
+        }
 
-	public String getBase() {
-		return base;
-	}
+        public int getSunrise() {
+            return sunrise;
+        }
 
-	public void setBase(String base) {
-		this.base = base;
-	}
+        public void setSunrise(int sunrise) {
+            this.sunrise = sunrise;
+        }
 
-	public Main getMain() {
-		return main;
-	}
+        public int getSunset() {
+            return sunset;
+        }
 
-	public void setMain(Main main) {
-		this.main = main;
-	}
+        public void setSunset(int sunset) {
+            this.sunset = sunset;
+        }
+    }
 
-	public Wind getWind() {
-		return wind;
-	}
+    class WeatherItem {
+        private int id;
+        private String main;
+        private String description;
+        private String icon;
 
-	public void setWind(Wind wind) {
-		this.wind = wind;
-	}
+        public int getId() {
+            return id;
+        }
 
-	public Clouds getClouds() {
-		return clouds;
-	}
+        public void setId(int id) {
+            this.id = id;
+        }
 
-	public void setClouds(Clouds clouds) {
-		this.clouds = clouds;
-	}
+        public String getMain() {
+            return main;
+        }
 
-	public int getDt() {
-		return dt;
-	}
+        public void setMain(String main) {
+            this.main = main;
+        }
 
-	public void setDt(int dt) {
-		this.dt = dt;
-	}
+        String getDescription() {
+            return description;
+        }
 
-	public int getId() {
-		return id;
-	}
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+        public String getIcon() {
+            return icon;
+        }
 
-	public String getName() {
-		return name;
-	}
+        public void setIcon(String icon) {
+            this.icon = icon;
+        }
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    class Main {
+        private double temp;
+        private double humidity;
+        private double pressure;
+        private double temp_min;
+        private double temp_max;
 
-	public int getCod() {
-		return cod;
-	}
+        double getTemp() {
+            return temp;
+        }
 
-	public void setCod(int cod) {
-		this.cod = cod;
-	}
+        public void setTemp(double temp) {
+            this.temp = temp;
+        }
+
+        public double getHumidity() {
+            return humidity;
+        }
+
+        public void setHumidity(double humidity) {
+            this.humidity = humidity;
+        }
+
+        public double getPressure() {
+            return pressure;
+        }
+
+        public void setPressure(double pressure) {
+            this.pressure = pressure;
+        }
+
+        public double getTemp_min() {
+            return temp_min;
+        }
+
+        public void setTemp_min(double temp_min) {
+            this.temp_min = temp_min;
+        }
+
+        public double getTemp_max() {
+            return temp_max;
+        }
+
+        public void setTemp_max(double temp_max) {
+            this.temp_max = temp_max;
+        }
+    }
+
+    class Wind {
+        private double speed;
+        private double gust;
+        private double deg;
+
+        public double getSpeed() {
+            return speed;
+        }
+
+        public void setSpeed(double speed) {
+            this.speed = speed;
+        }
+
+        public double getGust() {
+            return gust;
+        }
+
+        public void setGust(double gust) {
+            this.gust = gust;
+        }
+
+        public double getDeg() {
+            return deg;
+        }
+
+        public void setDeg(double deg) {
+            this.deg = deg;
+        }
+    }
+
+    class Clouds {
+
+        private int all;
+
+        public int getAll() {
+            return all;
+        }
+
+        public void setAll(int all) {
+            this.all = all;
+        }
+    }
+
+    public Coordinates getCoord() {
+        return coord;
+    }
+
+    public void setCoord(Coordinates coord) {
+        this.coord = coord;
+    }
+
+    public System getSys() {
+        return sys;
+    }
+
+    public void setSys(System sys) {
+        this.sys = sys;
+    }
+
+    ArrayList<WeatherItem> getWeather() {
+        return weather;
+    }
+
+    public void setWeather(ArrayList<WeatherItem> weather) {
+        this.weather = weather;
+    }
+
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
+    }
+
+    Main getMain() {
+        return main;
+    }
+
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
+    public Wind getWind() {
+        return wind;
+    }
+
+    public void setWind(Wind wind) {
+        this.wind = wind;
+    }
+
+    public Clouds getClouds() {
+        return clouds;
+    }
+
+    public void setClouds(Clouds clouds) {
+        this.clouds = clouds;
+    }
+
+    public int getDt() {
+        return dt;
+    }
+
+    public void setDt(int dt) {
+        this.dt = dt;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    int getCod() {
+        return cod;
+    }
+
+    public void setCod(int cod) {
+        this.cod = cod;
+    }
 }

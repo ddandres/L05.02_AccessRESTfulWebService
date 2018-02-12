@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">L05.02_AccessRESTfulWebService</string>
     <string name="weather_button">Check</string>
-    <string name="city_hint">City [London] or City,Country code [Valencia,ES]</string>
+    <string name="city_hint">London or London,UK </string>
     <string name="temperature">%1.2f ºC</string>
     <string name="not_connected">"The device is not connected to the network!"</string>
     <string name="not_found">"The requested city was not found!"</string>
