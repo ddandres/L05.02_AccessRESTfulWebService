@@ -17,9 +17,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -44,6 +49,12 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     ImageView ivIcon;
     Button bCheckWeather;
 
+    // Whether use Volley or HttpUrlConnection directly for HTTP requests
+    boolean useVolley = false;
+
+    // Request queue for Volley
+    RequestQueue queue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +67,17 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvWeatherDescription);
         ivIcon = findViewById(R.id.ivWeatherIcon);
         bCheckWeather = findViewById(R.id.bWeather);
+
+        // Add a listener that will keep track of whether use Volley or HttpUrlConnection for requests
+        ((RadioGroup) findViewById(R.id.rgMethod)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                useVolley = (checkedId == R.id.methodVolley);
+            }
+        });
+
+        // Create request queue for Volley
+        queue = Volley.newRequestQueue(getApplicationContext());
     }
 
     /*
@@ -71,8 +93,55 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         if (!etCity.getText().toString().isEmpty()) {
             // Check that network connectivity exists
             if (isConnected()) {
-                // Launch the AsyncTask in charge of accessing the web service
-                new WeatherTask(this).execute(etCity.getText().toString());
+
+                // Displays an indeterminate ProgressBar to show that an operation is in progress
+                pbConnecting.setVisibility(View.VISIBLE);
+                // Disable the button so the user cannot launch multiple requests
+                bCheckWeather.setEnabled(false);
+
+                // Build the URI to the RESTful web services
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("http");
+                builder.authority("api.openweathermap.org");
+                builder.appendPath("data");
+                builder.appendPath("2.5");
+                builder.appendPath("weather");
+                // As being a GET request, include the parameters on the URI
+                builder.appendQueryParameter("APPID", "879247f3f3bda41f02246d88e5b6deaa");
+                builder.appendQueryParameter("mode", "json");
+                builder.appendQueryParameter("units", "metric");
+                builder.appendQueryParameter("q", etCity.getText().toString());
+
+
+                if (useVolley) {
+                    // Custom Volley request, including URl,
+                    // listener for successful requests, and
+                    // listener for any errors
+                    WeatherRequest request = new WeatherRequest(builder.build().toString(),
+                            // Display the retrieved data
+                            new Response.Listener<WeatherPOJO>() {
+                                @Override
+                                public void onResponse(WeatherPOJO response) {
+                                    displayWeather(response);
+                                }
+                            },
+                            // Notify the user that the request could not be completed,
+                            // probably the name of the city was wrong
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(RestfulWeatherActivity.this,
+                                            R.string.not_found, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    // Add the request to the queue for processing
+                    queue.add(request);
+
+                } else {
+                    // Launch the AsyncTask in charge of accessing the web service
+                    new WeatherTask(this).execute(builder.build().toString());
+                }
+
             }
             // Notify the user that the device has not got Internet connection
             else {
@@ -98,6 +167,135 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     }
 
     /*
+     * Displays the data received from the HTTP request
+     */
+    public void displayWeather(WeatherPOJO weather) {
+        /*
+        * This particular web services always returns a response object.
+        * If anything goes wrong, all the fields of the object will be null but
+        * main.cod, which will display the HTTP response code.
+        * So, check the request was successful before updating the UI.
+        * */
+        if ((weather != null) && (weather.getCod() == 200)) {
+            // Update the temperature
+            tvTemperature.setText(String.format(getString(R.string.temperature), weather.getMain().getTemp()));
+            // Update the description of the current weather
+            tvDescription.setText(weather.getWeather().get(0).getDescription());
+            // Update the icon representing the current weather:
+            // http://openweathermap.org/weather-conditions
+            int icon = R.drawable.w01d;
+            switch (weather.getWeather().get(0).getId()) {
+
+                // Thunderstorm
+                case 200:
+                case 201:
+                case 202:
+                case 210:
+                case 211:
+                case 212:
+                case 221:
+                case 230:
+                case 231:
+                case 232:
+                    icon = R.drawable.w11d;
+                    break;
+
+                // Shower rain
+                case 300:
+                case 301:
+                case 302:
+                case 310:
+                case 311:
+                case 312:
+                case 313:
+                case 314:
+                case 321:
+                case 520:
+                case 521:
+                case 522:
+                case 531:
+                    icon = R.drawable.w09d;
+                    break;
+
+                // Rain
+                case 500:
+                case 501:
+                case 502:
+                case 503:
+                case 504:
+                    icon = R.drawable.w10d;
+                    break;
+
+                // Snow
+                case 511:
+                case 600:
+                case 601:
+                case 602:
+                case 611:
+                case 612:
+                case 615:
+                case 616:
+                case 620:
+                case 621:
+                case 622:
+                    icon = R.drawable.w13d;
+                    break;
+
+                // Mist
+                case 701:
+                case 711:
+                case 721:
+                case 731:
+                case 741:
+                case 751:
+                case 761:
+                case 762:
+                case 771:
+                case 781:
+                    icon = R.drawable.w50d;
+                    break;
+
+                // Clear sky
+                case 800:
+                    icon = R.drawable.w01d;
+                    break;
+
+                // Few clouds
+                case 801:
+                    icon = R.drawable.w02d;
+                    break;
+
+                // Scattered clouds
+                case 802:
+                    icon = R.drawable.w03d;
+                    break;
+
+                // Broken clouds
+                case 803:
+                case 804:
+                    icon = R.drawable.w04d;
+                    break;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ivIcon.setImageDrawable(getResources().getDrawable(icon, null));
+            } else {
+                ivIcon.setImageDrawable(getResources().getDrawable(icon));
+            }
+        }
+        // Notify the user that the request could not be completed,
+        // probably the name of the city was wrong
+        else {
+            Toast.makeText(this, getString(R.string.not_found), Toast.LENGTH_SHORT).show();
+        }
+
+        // Hides the indeterminate ProgressBar as the operation has finished
+        pbConnecting.setVisibility(View.INVISIBLE);
+        // Enable the button so the user can launch another request
+        bCheckWeather.setEnabled(true);
+    }
+
+    /*
     * Accesses a RESTful web service to get the current weather at the given city.
     * The input parameter is a String in the format "city" or "city,country_code".
     * The output parameter is a WeatherPOJO object containing the response from the web service.
@@ -111,17 +309,6 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         }
 
         /*
-         * Updates the UI before starting the background task
-         * */
-        @Override
-        protected void onPreExecute() {
-            // Displays an indeterminate ProgressBar to show that an operation is in progress
-            this.activity.get().pbConnecting.setVisibility(View.VISIBLE);
-            // Disable the button so the user cannot launch multiple requests
-            this.activity.get().bCheckWeather.setEnabled(false);
-        }
-
-        /*
         * Accesses the web service on background to get the weather to the input city
         * */
         @Override
@@ -129,22 +316,9 @@ public class RestfulWeatherActivity extends AppCompatActivity {
             // Resulting object
             WeatherPOJO pojo = null;
 
-            // Build the URI to the RESTful web services
-            Uri.Builder builder = new Uri.Builder();
-            builder.scheme("http");
-            builder.authority("api.openweathermap.org");
-            builder.appendPath("data");
-            builder.appendPath("2.5");
-            builder.appendPath("weather");
-            // As being a GET request, include the parameters on the URI
-            builder.appendQueryParameter("APPID", "879247f3f3bda41f02246d88e5b6deaa");
-            builder.appendQueryParameter("mode", "json");
-            builder.appendQueryParameter("units", "metric");
-            builder.appendQueryParameter("q", params[0]);
-
             try {
                 // Creates a new URL from the URI
-                URL url = new URL(builder.build().toString());
+                URL url = new URL(params[0]);
 
                 // Get a connection to the web service
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -183,135 +357,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         * */
         @Override
         protected void onPostExecute(WeatherPOJO result) {
-
-            /*
-            * This particular web services always returns a response object.
-            * If anything goes wrong, all the fields of the object will be null but
-            * main.cod, which will display the HTTP response code.
-            * So, check the request was successful before updating the UI.
-            * */
-            if ((result != null) && (result.getCod() == 200)) {
-                // Update the temperature
-                this.activity.get().tvTemperature.setText(String.format(
-                        this.activity.get().getString(R.string.temperature), result.getMain().getTemp()));
-                // Update the description of the current weather
-                this.activity.get().tvDescription.setText(result.getWeather().get(0).getDescription());
-                // Update the icon representing the current weather:
-                // http://openweathermap.org/weather-conditions
-                int icon = R.drawable.w01d;
-                switch (result.getWeather().get(0).getId()) {
-
-                    // Thunderstorm
-                    case 200:
-                    case 201:
-                    case 202:
-                    case 210:
-                    case 211:
-                    case 212:
-                    case 221:
-                    case 230:
-                    case 231:
-                    case 232:
-                        icon = R.drawable.w11d;
-                        break;
-
-                    // Shower rain
-                    case 300:
-                    case 301:
-                    case 302:
-                    case 310:
-                    case 311:
-                    case 312:
-                    case 313:
-                    case 314:
-                    case 321:
-                    case 520:
-                    case 521:
-                    case 522:
-                    case 531:
-                        icon = R.drawable.w09d;
-                        break;
-
-                    // Rain
-                    case 500:
-                    case 501:
-                    case 502:
-                    case 503:
-                    case 504:
-                        icon = R.drawable.w10d;
-                        break;
-
-                    // Snow
-                    case 511:
-                    case 600:
-                    case 601:
-                    case 602:
-                    case 611:
-                    case 612:
-                    case 615:
-                    case 616:
-                    case 620:
-                    case 621:
-                    case 622:
-                        icon = R.drawable.w13d;
-                        break;
-
-                    // Mist
-                    case 701:
-                    case 711:
-                    case 721:
-                    case 731:
-                    case 741:
-                    case 751:
-                    case 761:
-                    case 762:
-                    case 771:
-                    case 781:
-                        icon = R.drawable.w50d;
-                        break;
-
-                    // Clear sky
-                    case 800:
-                        icon = R.drawable.w01d;
-                        break;
-
-                    // Few clouds
-                    case 801:
-                        icon = R.drawable.w02d;
-                        break;
-
-                    // Scattered clouds
-                    case 802:
-                        icon = R.drawable.w03d;
-                        break;
-
-                    // Broken clouds
-                    case 803:
-                    case 804:
-                        icon = R.drawable.w04d;
-                        break;
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    this.activity.get().ivIcon.setImageDrawable(this.activity.get().getResources().getDrawable(icon, null));
-                } else {
-                    this.activity.get().ivIcon.setImageDrawable(this.activity.get().getResources().getDrawable(icon));
-                }
-            }
-            // Notify the user that the request could not be completed,
-            // probably the name of the city was wrong
-            else {
-                Toast.makeText(
-                        this.activity.get(),
-                        this.activity.get().getString(R.string.not_found),
-                        Toast.LENGTH_SHORT).show();
-            }
-
-
-            // Hides the indeterminate ProgressBar as the operation has finished
-            this.activity.get().pbConnecting.setVisibility(View.INVISIBLE);
-            // Enable the button so the user cann launch another request
-            this.activity.get().bCheckWeather.setEnabled(true);
+            this.activity.get().displayWeather(result);
         }
 
     }

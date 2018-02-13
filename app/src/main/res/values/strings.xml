@@ -6,4 +6,7 @@
     <string name="not_connected">"The device is not connected to the network!"</string>
     <string name="not_found">"The requested city was not found!"</string>
     <string name="not_data">"You should introduce a city name"</string>
+    <string name="method_http">"HttpUrlConnection"</string>
+    <string name="method_volley">"Volley"</string>
+    <string name="select_request">"HTTP requests by:"</string>
 </resources>

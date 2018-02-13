@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etWeather" />
+        app:layout_constraintTop_toBottomOf="@+id/rgMethod" />
 
     <TextView
         android:id="@+id/tvWeatherTemperature"
@@ -90,6 +90,46 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etWeather" />
+        app:layout_constraintTop_toBottomOf="@+id/rgMethod" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/select_request"
+        app:layout_constraintBottom_toBottomOf="@+id/rgMethod"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rgMethod" />
+
+
+    <RadioGroup
+        android:id="@+id/rgMethod"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/bWeather">
+
+        <RadioButton
+            android:id="@+id/methodHttp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/method_http" />
+
+        <RadioButton
+            android:id="@+id/methodVolley"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/method_volley" />
+
+    </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>
