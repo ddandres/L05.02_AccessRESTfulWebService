@@ -2,7 +2,7 @@
  * Copyright (c) 2016. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
  */
 
-package labs.sdm.l0502_accessrestfulwebservice;
+package labs.dadm.l0502_accessrestfulwebservice;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,10 +35,12 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /*
-* Gets the current weather at a given city from a RESTful web service.
-* Web service Documentation: http://openweathermap.org/api
-* */
+ * Gets the current weather at a given city from a RESTful web service.
+ * Web service Documentation: http://openweathermap.org/api
+ * */
 public class RestfulWeatherActivity extends AppCompatActivity {
 
     // Hold references to View objects
@@ -81,8 +83,8 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     }
 
     /*
-    * Handles the event to get the weather.
-    * */
+     * Handles the event to get the weather.
+     * */
     public void getWeather(View v) {
 
         // Hide the soft keyboard
@@ -101,7 +103,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
 
                 // Build the URI to the RESTful web services
                 Uri.Builder builder = new Uri.Builder();
-                builder.scheme("http");
+                builder.scheme("https");
                 builder.authority("api.openweathermap.org");
                 builder.appendPath("data");
                 builder.appendPath("2.5");
@@ -155,8 +157,8 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     }
 
     /*
-    * Determines whether the device has got Internet connection.
-    * */
+     * Determines whether the device has got Internet connection.
+     * */
     public boolean isConnected() {
         // Get a reference to the ConnectivityManager
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -171,11 +173,11 @@ public class RestfulWeatherActivity extends AppCompatActivity {
      */
     public void displayWeather(WeatherPOJO weather) {
         /*
-        * This particular web services always returns a response object.
-        * If anything goes wrong, all the fields of the object will be null but
-        * main.cod, which will display the HTTP response code.
-        * So, check the request was successful before updating the UI.
-        * */
+         * This particular web services always returns a response object.
+         * If anything goes wrong, all the fields of the object will be null but
+         * main.cod, which will display the HTTP response code.
+         * So, check the request was successful before updating the UI.
+         * */
         if ((weather != null) && (weather.getCod() == 200)) {
             // Update the temperature
             tvTemperature.setText(String.format(getString(R.string.temperature), weather.getMain().getTemp()));
@@ -296,10 +298,10 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     }
 
     /*
-    * Accesses a RESTful web service to get the current weather at the given city.
-    * The input parameter is a String in the format "city" or "city,country_code".
-    * The output parameter is a WeatherPOJO object containing the response from the web service.
-    * */
+     * Accesses a RESTful web service to get the current weather at the given city.
+     * The input parameter is a String in the format "city" or "city,country_code".
+     * The output parameter is a WeatherPOJO object containing the response from the web service.
+     * */
     private static class WeatherTask extends AsyncTask<String, Void, WeatherPOJO> {
 
         WeakReference<RestfulWeatherActivity> activity;
@@ -309,8 +311,8 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         }
 
         /*
-        * Accesses the web service on background to get the weather to the input city
-        * */
+         * Accesses the web service on background to get the weather to the input city
+         * */
         @Override
         protected WeatherPOJO doInBackground(String... params) {
             // Resulting object
@@ -321,7 +323,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                 URL url = new URL(params[0]);
 
                 // Get a connection to the web service
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setDoInput(true);
 
@@ -353,8 +355,8 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         }
 
         /*
-        * Updates the UI according to the received response
-        * */
+         * Updates the UI according to the received response
+         * */
         @Override
         protected void onPostExecute(WeatherPOJO result) {
             this.activity.get().displayWeather(result);

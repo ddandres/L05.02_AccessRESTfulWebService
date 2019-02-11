@@ -1,4 +1,4 @@
-package labs.sdm.l0502_accessrestfulwebservice;
+package labs.dadm.l0502_accessrestfulwebservice;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
