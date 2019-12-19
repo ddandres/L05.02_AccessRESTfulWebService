@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
+ */
+
 package labs.dadm.l0502_accessrestfulwebservice;
 
 import com.android.volley.NetworkResponse;

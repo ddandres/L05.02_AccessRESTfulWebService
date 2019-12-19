@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -132,8 +132,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(RestfulWeatherActivity.this,
-                                            R.string.not_found, Toast.LENGTH_SHORT).show();
+                                    displayWeather(null);
                                 }
                             });
                     // Add the request to the queue for processing

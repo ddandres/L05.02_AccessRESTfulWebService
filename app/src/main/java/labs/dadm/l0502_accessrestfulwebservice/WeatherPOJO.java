@@ -23,7 +23,7 @@ import java.util.ArrayList;
 	"cod":200
 }
 */
-public class WeatherPOJO {
+class WeatherPOJO {
 
     private Coordinates coord;
     private System sys;
@@ -41,19 +41,19 @@ public class WeatherPOJO {
         private double lon;
         private double lat;
 
-        public double getLon() {
+        double getLon() {
             return lon;
         }
 
-        public void setLon(double lon) {
+        void setLon(double lon) {
             this.lon = lon;
         }
 
-        public double getLat() {
+        double getLat() {
             return lat;
         }
 
-        public void setLat(double lat) {
+        void setLat(double lat) {
             this.lat = lat;
         }
     }
@@ -63,27 +63,27 @@ public class WeatherPOJO {
         private int sunrise;
         private int sunset;
 
-        public String getCountry() {
+        String getCountry() {
             return country;
         }
 
-        public void setCountry(String country) {
+        void setCountry(String country) {
             this.country = country;
         }
 
-        public int getSunrise() {
+        int getSunrise() {
             return sunrise;
         }
 
-        public void setSunrise(int sunrise) {
+        void setSunrise(int sunrise) {
             this.sunrise = sunrise;
         }
 
-        public int getSunset() {
+        int getSunset() {
             return sunset;
         }
 
-        public void setSunset(int sunset) {
+        void setSunset(int sunset) {
             this.sunset = sunset;
         }
     }
@@ -94,19 +94,19 @@ public class WeatherPOJO {
         private String description;
         private String icon;
 
-        public int getId() {
+        int getId() {
             return id;
         }
 
-        public void setId(int id) {
+        void setId(int id) {
             this.id = id;
         }
 
-        public String getMain() {
+        String getMain() {
             return main;
         }
 
-        public void setMain(String main) {
+        void setMain(String main) {
             this.main = main;
         }
 
@@ -114,15 +114,15 @@ public class WeatherPOJO {
             return description;
         }
 
-        public void setDescription(String description) {
+        void setDescription(String description) {
             this.description = description;
         }
 
-        public String getIcon() {
+        String getIcon() {
             return icon;
         }
 
-        public void setIcon(String icon) {
+        void setIcon(String icon) {
             this.icon = icon;
         }
     }
@@ -138,39 +138,39 @@ public class WeatherPOJO {
             return temp;
         }
 
-        public void setTemp(double temp) {
+        void setTemp(double temp) {
             this.temp = temp;
         }
 
-        public double getHumidity() {
+        double getHumidity() {
             return humidity;
         }
 
-        public void setHumidity(double humidity) {
+        void setHumidity(double humidity) {
             this.humidity = humidity;
         }
 
-        public double getPressure() {
+        double getPressure() {
             return pressure;
         }
 
-        public void setPressure(double pressure) {
+        void setPressure(double pressure) {
             this.pressure = pressure;
         }
 
-        public double getTemp_min() {
+        double getTemp_min() {
             return temp_min;
         }
 
-        public void setTemp_min(double temp_min) {
+        void setTemp_min(double temp_min) {
             this.temp_min = temp_min;
         }
 
-        public double getTemp_max() {
+        double getTemp_max() {
             return temp_max;
         }
 
-        public void setTemp_max(double temp_max) {
+        void setTemp_max(double temp_max) {
             this.temp_max = temp_max;
         }
     }
@@ -180,27 +180,27 @@ public class WeatherPOJO {
         private double gust;
         private double deg;
 
-        public double getSpeed() {
+        double getSpeed() {
             return speed;
         }
 
-        public void setSpeed(double speed) {
+        void setSpeed(double speed) {
             this.speed = speed;
         }
 
-        public double getGust() {
+        double getGust() {
             return gust;
         }
 
-        public void setGust(double gust) {
+        void setGust(double gust) {
             this.gust = gust;
         }
 
-        public double getDeg() {
+        double getDeg() {
             return deg;
         }
 
-        public void setDeg(double deg) {
+        void setDeg(double deg) {
             this.deg = deg;
         }
     }
@@ -209,28 +209,28 @@ public class WeatherPOJO {
 
         private int all;
 
-        public int getAll() {
+        int getAll() {
             return all;
         }
 
-        public void setAll(int all) {
+        void setAll(int all) {
             this.all = all;
         }
     }
 
-    public Coordinates getCoord() {
+    Coordinates getCoord() {
         return coord;
     }
 
-    public void setCoord(Coordinates coord) {
+    void setCoord(Coordinates coord) {
         this.coord = coord;
     }
 
-    public System getSys() {
+    System getSys() {
         return sys;
     }
 
-    public void setSys(System sys) {
+    void setSys(System sys) {
         this.sys = sys;
     }
 
@@ -238,15 +238,15 @@ public class WeatherPOJO {
         return weather;
     }
 
-    public void setWeather(ArrayList<WeatherItem> weather) {
+    void setWeather(ArrayList<WeatherItem> weather) {
         this.weather = weather;
     }
 
-    public String getBase() {
+    String getBase() {
         return base;
     }
 
-    public void setBase(String base) {
+    void setBase(String base) {
         this.base = base;
     }
 
@@ -254,47 +254,47 @@ public class WeatherPOJO {
         return main;
     }
 
-    public void setMain(Main main) {
+    void setMain(Main main) {
         this.main = main;
     }
 
-    public Wind getWind() {
+    Wind getWind() {
         return wind;
     }
 
-    public void setWind(Wind wind) {
+    void setWind(Wind wind) {
         this.wind = wind;
     }
 
-    public Clouds getClouds() {
+    Clouds getClouds() {
         return clouds;
     }
 
-    public void setClouds(Clouds clouds) {
+    void setClouds(Clouds clouds) {
         this.clouds = clouds;
     }
 
-    public int getDt() {
+    int getDt() {
         return dt;
     }
 
-    public void setDt(int dt) {
+    void setDt(int dt) {
         this.dt = dt;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    void setId(int id) {
         this.id = id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
@@ -302,7 +302,7 @@ public class WeatherPOJO {
         return cod;
     }
 
-    public void setCod(int cod) {
+    void setCod(int cod) {
         this.cod = cod;
     }
 }
