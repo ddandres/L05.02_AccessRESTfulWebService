@@ -5,12 +5,13 @@
 package labs.dadm.l0502_accessrestfulwebservice;
 
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -159,12 +162,25 @@ public class RestfulWeatherActivity extends AppCompatActivity {
      * Determines whether the device has got Internet connection.
      * */
     public boolean isConnected() {
+        boolean result = false;
+
         // Get a reference to the ConnectivityManager
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         // Get information about the default active data network
-        NetworkInfo info = manager.getActiveNetworkInfo();
-        // There will be connectivity when there is a default connected network
-        return ((info != null) && (info.isConnected()));
+        if (Build.VERSION.SDK_INT > 22) {
+            final Network activeNetwork = manager.getActiveNetwork();
+            if (activeNetwork != null) {
+                final NetworkCapabilities networkCapabilities = manager.getNetworkCapabilities(activeNetwork);
+                result = networkCapabilities != null && (
+                        networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+            }
+        } else {
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            result = ((info != null) && (info.isConnected()));
+        }
+
+        return result;
     }
 
     /*

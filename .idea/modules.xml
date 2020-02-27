@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Demos-L05.02_AccessRESTfulWebService.iml" filepath="$PROJECT_DIR$/Demos-L05.02_AccessRESTfulWebService.iml" group="L05.02_AccessRESTfulWebService" />
       <module fileurl="file://$PROJECT_DIR$/L05.02_AccessRESTfulWebService.iml" filepath="$PROJECT_DIR$/L05.02_AccessRESTfulWebService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/L05.02_AccessRESTfulWebService-app.iml" filepath="$PROJECT_DIR$/app/L05.02_AccessRESTfulWebService-app.iml" group="L05.02_AccessRESTfulWebService/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
