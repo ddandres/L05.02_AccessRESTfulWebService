@@ -9,4 +9,5 @@
     <string name="method_http">"HttpsUrlConnection"</string>
     <string name="method_volley">"Volley"</string>
     <string name="select_request">"HTTP requests by:"</string>
+    <string name="weather_icon_description">Weather icon</string>
 </resources>

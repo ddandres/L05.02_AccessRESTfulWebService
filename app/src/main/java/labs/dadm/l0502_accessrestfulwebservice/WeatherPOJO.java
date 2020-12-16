@@ -37,7 +37,7 @@ class WeatherPOJO {
     private String name;
     private int cod;
 
-    class Coordinates {
+    static class Coordinates {
         private double lon;
         private double lat;
 
@@ -58,7 +58,7 @@ class WeatherPOJO {
         }
     }
 
-    class System {
+    static class System {
         private String country;
         private int sunrise;
         private int sunset;
@@ -88,7 +88,7 @@ class WeatherPOJO {
         }
     }
 
-    class WeatherItem {
+    static class WeatherItem {
         private int id;
         private String main;
         private String description;
@@ -127,7 +127,7 @@ class WeatherPOJO {
         }
     }
 
-    class Main {
+    static class Main {
         private double temp;
         private double humidity;
         private double pressure;
@@ -175,7 +175,7 @@ class WeatherPOJO {
         }
     }
 
-    class Wind {
+    static class Wind {
         private double speed;
         private double gust;
         private double deg;
@@ -205,7 +205,7 @@ class WeatherPOJO {
         }
     }
 
-    class Clouds {
+    static class Clouds {
 
         private int all;
 

@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class WeatherRequest extends Request<WeatherPOJO> {
 
-    private Response.Listener<WeatherPOJO> listener;
+    final private Response.Listener<WeatherPOJO> listener;
 
     public WeatherRequest(String url, Response.Listener<WeatherPOJO> listener, Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);

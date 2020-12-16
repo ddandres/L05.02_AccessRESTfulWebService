@@ -9,9 +9,9 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -23,16 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -57,6 +55,9 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     // Whether use Volley or HttpUrlConnection directly for HTTP requests
     boolean useVolley = false;
 
+    // Handler to worker thread
+    Handler handler;
+
     // Request queue for Volley
     RequestQueue queue;
 
@@ -74,15 +75,14 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         bCheckWeather = findViewById(R.id.bWeather);
 
         // Add a listener that will keep track of whether use Volley or HttpUrlConnection for requests
-        ((RadioGroup) findViewById(R.id.rgMethod)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                useVolley = (checkedId == R.id.methodVolley);
-            }
-        });
+        ((RadioGroup) findViewById(R.id.rgMethod)).setOnCheckedChangeListener(
+                (group, checkedId) -> useVolley = (checkedId == R.id.methodVolley));
 
         // Create request queue for Volley
         queue = Volley.newRequestQueue(getApplicationContext());
+
+        // Create handler for worker thread
+        handler = new Handler();
     }
 
     /*
@@ -124,26 +124,16 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     // listener for any errors
                     WeatherRequest request = new WeatherRequest(builder.build().toString(),
                             // Display the retrieved data
-                            new Response.Listener<WeatherPOJO>() {
-                                @Override
-                                public void onResponse(WeatherPOJO response) {
-                                    displayWeather(response);
-                                }
-                            },
+                            this::displayWeather,
                             // Notify the user that the request could not be completed,
                             // probably the name of the city was wrong
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    displayWeather(null);
-                                }
-                            });
+                            error -> displayWeather(null));
                     // Add the request to the queue for processing
                     queue.add(request);
 
                 } else {
                     // Launch the AsyncTask in charge of accessing the web service
-                    new WeatherTask(this).execute(builder.build().toString());
+                    new WeatherThread(builder.build().toString()).start();
                 }
 
             }
@@ -186,7 +176,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     /*
      * Displays the data received from the HTTP request
      */
-    public void displayWeather(WeatherPOJO weather) {
+    public void displayWeather(final WeatherPOJO weather) {
         /*
          * This particular web services always returns a response object.
          * If anything goes wrong, all the fields of the object will be null but
@@ -294,11 +284,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     break;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ivIcon.setImageDrawable(getResources().getDrawable(icon, null));
-            } else {
-                ivIcon.setImageDrawable(getResources().getDrawable(icon));
-            }
+            ivIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), icon, null));
         }
         // Notify the user that the request could not be completed,
         // probably the name of the city was wrong
@@ -317,25 +303,21 @@ public class RestfulWeatherActivity extends AppCompatActivity {
      * The input parameter is a String in the format "city" or "city,country_code".
      * The output parameter is a WeatherPOJO object containing the response from the web service.
      * */
-    private static class WeatherTask extends AsyncTask<String, Void, WeatherPOJO> {
+    private class WeatherThread extends Thread {
 
-        WeakReference<RestfulWeatherActivity> activity;
+        String url;
+        WeatherPOJO pojo;
 
-        WeatherTask(RestfulWeatherActivity activity) {
-            this.activity = new WeakReference<>(activity);
+        WeatherThread(String url) {
+            this.url = url;
         }
 
-        /*
-         * Accesses the web service on background to get the weather to the input city
-         * */
         @Override
-        protected WeatherPOJO doInBackground(String... params) {
+        public void run() {
             // Resulting object
-            WeatherPOJO pojo = null;
-
             try {
                 // Creates a new URL from the URI
-                URL url = new URL(params[0]);
+                final URL url = new URL(this.url);
 
                 // Get a connection to the web service
                 HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -366,17 +348,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
             }
 
             // Return the received WeatherPOJO object
-            return pojo;
+            handler.post(() -> displayWeather(pojo));
         }
-
-        /*
-         * Updates the UI according to the received response
-         * */
-        @Override
-        protected void onPostExecute(WeatherPOJO result) {
-            this.activity.get().displayWeather(result);
-        }
-
     }
-
 }
