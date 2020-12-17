@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -31,6 +30,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -55,9 +55,6 @@ public class RestfulWeatherActivity extends AppCompatActivity {
     // Whether use Volley or HttpUrlConnection directly for HTTP requests
     boolean useVolley = false;
 
-    // Handler to worker thread
-    Handler handler;
-
     // Request queue for Volley
     RequestQueue queue;
 
@@ -80,9 +77,6 @@ public class RestfulWeatherActivity extends AppCompatActivity {
 
         // Create request queue for Volley
         queue = Volley.newRequestQueue(getApplicationContext());
-
-        // Create handler for worker thread
-        handler = new Handler();
     }
 
     /*
@@ -133,7 +127,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
 
                 } else {
                     // Launch the AsyncTask in charge of accessing the web service
-                    new WeatherThread(builder.build().toString()).start();
+                    new WeatherThread(this, builder.build().toString()).start();
                 }
 
             }
@@ -307,8 +301,10 @@ public class RestfulWeatherActivity extends AppCompatActivity {
 
         String url;
         WeatherPOJO pojo;
+        WeakReference<RestfulWeatherActivity> reference;
 
-        WeatherThread(String url) {
+        WeatherThread(RestfulWeatherActivity activity, String url) {
+            reference = new WeakReference<>(activity);
             this.url = url;
         }
 
@@ -348,7 +344,9 @@ public class RestfulWeatherActivity extends AppCompatActivity {
             }
 
             // Return the received WeatherPOJO object
-            handler.post(() -> displayWeather(pojo));
+            if (reference.get() != null) {
+                runOnUiThread(() -> displayWeather(pojo));
+            }
         }
     }
 }
