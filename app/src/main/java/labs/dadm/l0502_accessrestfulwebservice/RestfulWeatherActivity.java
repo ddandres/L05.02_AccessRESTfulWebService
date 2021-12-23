@@ -38,10 +38,8 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/*
- * Gets the current weather at a given city from a RESTful web service.
- * Web service Documentation: http://openweathermap.org/api
- * */
+// Gets the current weather at a given city from a RESTful web service.
+// Web service Documentation: http://openweathermap.org/api
 public class RestfulWeatherActivity extends AppCompatActivity {
 
     // Hold references to View objects
@@ -71,6 +69,8 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         ivIcon = findViewById(R.id.ivWeatherIcon);
         bCheckWeather = findViewById(R.id.bWeather);
 
+        bCheckWeather.setOnClickListener(v -> getWeather());
+
         // Add a listener that will keep track of whether use Volley or HttpUrlConnection for requests
         ((RadioGroup) findViewById(R.id.rgMethod)).setOnCheckedChangeListener(
                 (group, checkedId) -> useVolley = (checkedId == R.id.methodVolley));
@@ -79,14 +79,14 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         queue = Volley.newRequestQueue(getApplicationContext());
     }
 
-    /*
-     * Handles the event to get the weather.
-     * */
-    public void getWeather(View v) {
+    // Handles the event to get the weather.
+    private void getWeather() {
 
         // Hide the soft keyboard
         final InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        manager.hideSoftInputFromWindow(
+                bCheckWeather.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         // Check that something has been entered as city name
         if (!etCity.getText().toString().isEmpty()) {
@@ -133,28 +133,34 @@ public class RestfulWeatherActivity extends AppCompatActivity {
             }
             // Notify the user that the device has not got Internet connection
             else {
-                Toast.makeText(this, getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+                Toast.makeText(
+                        this,
+                        getResources().getString(R.string.not_connected),
+                        Toast.LENGTH_SHORT).show();
             }
         }
         // Notify the user that it is required to enter a city name
         else {
-            Toast.makeText(this, getResources().getString(R.string.not_data), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getResources().getString(R.string.not_data),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
-    /*
-     * Determines whether the device has got Internet connection.
-     * */
+    // Determines whether the device has got Internet connection.
     public boolean isConnected() {
         boolean result = false;
 
         // Get a reference to the ConnectivityManager
-        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        final ConnectivityManager manager =
+                (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         // Get information about the default active data network
         if (Build.VERSION.SDK_INT > 22) {
             final Network activeNetwork = manager.getActiveNetwork();
             if (activeNetwork != null) {
-                final NetworkCapabilities networkCapabilities = manager.getNetworkCapabilities(activeNetwork);
+                final NetworkCapabilities networkCapabilities =
+                        manager.getNetworkCapabilities(activeNetwork);
                 result = networkCapabilities != null && (
                         networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
@@ -163,20 +169,15 @@ public class RestfulWeatherActivity extends AppCompatActivity {
             NetworkInfo info = manager.getActiveNetworkInfo();
             result = ((info != null) && (info.isConnected()));
         }
-
         return result;
     }
 
-    /*
-     * Displays the data received from the HTTP request
-     */
+    // Displays the data received from the HTTP request
     public void displayWeather(final WeatherPOJO weather) {
-        /*
-         * This particular web services always returns a response object.
-         * If anything goes wrong, all the fields of the object will be null but
-         * main.cod, which will display the HTTP response code.
-         * So, check the request was successful before updating the UI.
-         * */
+        // This particular web services always returns a response object.
+        // If anything goes wrong, all the fields of the object will be null but
+        // main.cod, which will display the HTTP response code.
+        // So, check the request was successful before updating the UI.
         if ((weather != null) && (weather.getCod() == 200)) {
             // Update the temperature
             tvTemperature.setText(String.format(getString(R.string.temperature), weather.getMain().getTemp()));
@@ -283,7 +284,10 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         // Notify the user that the request could not be completed,
         // probably the name of the city was wrong
         else {
-            Toast.makeText(this, getString(R.string.not_found), Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    getString(R.string.not_found),
+                    Toast.LENGTH_SHORT).show();
         }
 
         // Hides the indeterminate ProgressBar as the operation has finished
@@ -292,16 +296,14 @@ public class RestfulWeatherActivity extends AppCompatActivity {
         bCheckWeather.setEnabled(true);
     }
 
-    /*
-     * Accesses a RESTful web service to get the current weather at the given city.
-     * The input parameter is a String in the format "city" or "city,country_code".
-     * The output parameter is a WeatherPOJO object containing the response from the web service.
-     * */
+    // Accesses a RESTful web service to get the current weather at the given city.
+    // The input parameter is a String in the format "city" or "city,country_code".
+    // The output parameter is a WeatherPOJO object containing the response from the web service.
     private class WeatherThread extends Thread {
 
         String url;
         WeatherPOJO pojo;
-        WeakReference<RestfulWeatherActivity> reference;
+        final WeakReference<RestfulWeatherActivity> reference;
 
         WeatherThread(RestfulWeatherActivity activity, String url) {
             reference = new WeakReference<>(activity);

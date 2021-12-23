@@ -6,7 +6,8 @@ package labs.dadm.l0502_accessrestfulwebservice;
 
 import java.util.ArrayList;
 
-/* Sample response in JSON format
+// Sample response in JSON format
+/*
 {
 	"coord":{"lon":-0.37739,"lat":39.469749},
 	"sys":{"country":"ES","sunrise":1381817529,"sunset":1381857726},
