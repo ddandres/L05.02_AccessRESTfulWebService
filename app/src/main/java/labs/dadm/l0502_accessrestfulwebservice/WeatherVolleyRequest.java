@@ -14,11 +14,11 @@ import java.io.UnsupportedEncodingException;
 
 // Launches a GET request to get the current weather.
 // Data is processed using Gson to obtain a WeatherPOJO object.
-public class WeatherRequest extends Request<WeatherPOJO> {
+public class WeatherVolleyRequest extends Request<WeatherPOJO> {
 
     final private Response.Listener<WeatherPOJO> listener;
 
-    public WeatherRequest(
+    public WeatherVolleyRequest(
             String url,
             Response.Listener<WeatherPOJO> listener,
             Response.ErrorListener errorListener) {

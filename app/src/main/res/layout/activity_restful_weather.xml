@@ -20,6 +20,8 @@
         android:hint="@string/city_hint"
         android:importantForAutofill="no"
         android:inputType="text"
+        android:minHeight="48dp"
+        android:textColorHint="#D81B60"
         app:layout_constraintEnd_toStartOf="@+id/bWeather"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,14 +47,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/weather_icon_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rgMethod" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <TextView
         android:id="@+id/tvWeatherTemperature"
@@ -84,14 +85,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rgMethod" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -99,33 +98,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:labelFor="@+id/spinner"
         android:text="@string/select_request"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etWeather" />
 
-    <RadioGroup
-        android:id="@+id/rgMethod"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="horizontal"
+        android:entries="@array/http_libraries"
+        android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 
-        <RadioButton
-            android:id="@+id/methodHttp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/method_http" />
-
-        <RadioButton
-            android:id="@+id/methodVolley"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/method_volley" />
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

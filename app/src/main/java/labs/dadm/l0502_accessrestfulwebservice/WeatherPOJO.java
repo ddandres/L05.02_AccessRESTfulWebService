@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
+ * Copyright (c) 2019. David de Andrés and Juan Carlos Ruiz, DISCA - UPV, Development of apps for mobile devices.
  */
 
 package labs.dadm.l0502_accessrestfulwebservice;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 	"cod":200
 }
 */
-class WeatherPOJO {
+public class WeatherPOJO {
 
     private Coordinates coord;
     private System sys;
@@ -38,272 +38,272 @@ class WeatherPOJO {
     private String name;
     private int cod;
 
-    static class Coordinates {
+    public static class Coordinates {
         private double lon;
         private double lat;
 
-        double getLon() {
+        public double getLon() {
             return lon;
         }
 
-        void setLon(double lon) {
+        public void setLon(double lon) {
             this.lon = lon;
         }
 
-        double getLat() {
+        public double getLat() {
             return lat;
         }
 
-        void setLat(double lat) {
+        public void setLat(double lat) {
             this.lat = lat;
         }
     }
 
-    static class System {
+    public static class System {
         private String country;
         private int sunrise;
         private int sunset;
 
-        String getCountry() {
+        public String getCountry() {
             return country;
         }
 
-        void setCountry(String country) {
+        public void setCountry(String country) {
             this.country = country;
         }
 
-        int getSunrise() {
+        public int getSunrise() {
             return sunrise;
         }
 
-        void setSunrise(int sunrise) {
+        public void setSunrise(int sunrise) {
             this.sunrise = sunrise;
         }
 
-        int getSunset() {
+        public int getSunset() {
             return sunset;
         }
 
-        void setSunset(int sunset) {
+        public void setSunset(int sunset) {
             this.sunset = sunset;
         }
     }
 
-    static class WeatherItem {
+    public static class WeatherItem {
         private int id;
         private String main;
         private String description;
         private String icon;
 
-        int getId() {
+        public int getId() {
             return id;
         }
 
-        void setId(int id) {
+        public void setId(int id) {
             this.id = id;
         }
 
-        String getMain() {
+        public String getMain() {
             return main;
         }
 
-        void setMain(String main) {
+        public void setMain(String main) {
             this.main = main;
         }
 
-        String getDescription() {
+        public String getDescription() {
             return description;
         }
 
-        void setDescription(String description) {
+        public void setDescription(String description) {
             this.description = description;
         }
 
-        String getIcon() {
+        public String getIcon() {
             return icon;
         }
 
-        void setIcon(String icon) {
+        public void setIcon(String icon) {
             this.icon = icon;
         }
     }
 
-    static class Main {
+    public static class Main {
         private double temp;
         private double humidity;
         private double pressure;
         private double temp_min;
         private double temp_max;
 
-        double getTemp() {
+        public double getTemp() {
             return temp;
         }
 
-        void setTemp(double temp) {
+        public void setTemp(double temp) {
             this.temp = temp;
         }
 
-        double getHumidity() {
+        public double getHumidity() {
             return humidity;
         }
 
-        void setHumidity(double humidity) {
+        public void setHumidity(double humidity) {
             this.humidity = humidity;
         }
 
-        double getPressure() {
+        public double getPressure() {
             return pressure;
         }
 
-        void setPressure(double pressure) {
+        public void setPressure(double pressure) {
             this.pressure = pressure;
         }
 
-        double getTemp_min() {
+        public double getTemp_min() {
             return temp_min;
         }
 
-        void setTemp_min(double temp_min) {
+        public void setTemp_min(double temp_min) {
             this.temp_min = temp_min;
         }
 
-        double getTemp_max() {
+        public double getTemp_max() {
             return temp_max;
         }
 
-        void setTemp_max(double temp_max) {
+        public void setTemp_max(double temp_max) {
             this.temp_max = temp_max;
         }
     }
 
-    static class Wind {
+    public static class Wind {
         private double speed;
         private double gust;
         private double deg;
 
-        double getSpeed() {
+        public double getSpeed() {
             return speed;
         }
 
-        void setSpeed(double speed) {
+        public void setSpeed(double speed) {
             this.speed = speed;
         }
 
-        double getGust() {
+        public double getGust() {
             return gust;
         }
 
-        void setGust(double gust) {
+        public void setGust(double gust) {
             this.gust = gust;
         }
 
-        double getDeg() {
+        public double getDeg() {
             return deg;
         }
 
-        void setDeg(double deg) {
+        public void setDeg(double deg) {
             this.deg = deg;
         }
     }
 
-    static class Clouds {
+    public static class Clouds {
 
         private int all;
 
-        int getAll() {
+        public int getAll() {
             return all;
         }
 
-        void setAll(int all) {
+        public void setAll(int all) {
             this.all = all;
         }
     }
 
-    Coordinates getCoord() {
+    public Coordinates getCoord() {
         return coord;
     }
 
-    void setCoord(Coordinates coord) {
+    public void setCoord(Coordinates coord) {
         this.coord = coord;
     }
 
-    System getSys() {
+    public System getSys() {
         return sys;
     }
 
-    void setSys(System sys) {
+    public void setSys(System sys) {
         this.sys = sys;
     }
 
-    ArrayList<WeatherItem> getWeather() {
+    public ArrayList<WeatherItem> getWeather() {
         return weather;
     }
 
-    void setWeather(ArrayList<WeatherItem> weather) {
+    public void setWeather(ArrayList<WeatherItem> weather) {
         this.weather = weather;
     }
 
-    String getBase() {
+    public String getBase() {
         return base;
     }
 
-    void setBase(String base) {
+    public void setBase(String base) {
         this.base = base;
     }
 
-    Main getMain() {
+    public Main getMain() {
         return main;
     }
 
-    void setMain(Main main) {
+    public void setMain(Main main) {
         this.main = main;
     }
 
-    Wind getWind() {
+    public Wind getWind() {
         return wind;
     }
 
-    void setWind(Wind wind) {
+    public void setWind(Wind wind) {
         this.wind = wind;
     }
 
-    Clouds getClouds() {
+    public Clouds getClouds() {
         return clouds;
     }
 
-    void setClouds(Clouds clouds) {
+    public void setClouds(Clouds clouds) {
         this.clouds = clouds;
     }
 
-    int getDt() {
+    public int getDt() {
         return dt;
     }
 
-    void setDt(int dt) {
+    public void setDt(int dt) {
         this.dt = dt;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    int getCod() {
+    public int getCod() {
         return cod;
     }
 
-    void setCod(int cod) {
+    public void setCod(int cod) {
         this.cod = cod;
     }
 }
