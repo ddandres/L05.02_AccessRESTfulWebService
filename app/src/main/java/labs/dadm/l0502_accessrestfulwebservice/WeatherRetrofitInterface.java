@@ -10,6 +10,6 @@ import retrofit2.http.Query;
 
 public interface WeatherRetrofitInterface {
 
-    @GET("weather?APPID=879247f3f3bda41f02246d88e5b6deaa&mode=json&units=metric")
+    @GET("weather?APPID=MY_API_KEY&mode=json&units=metric")
     Call<WeatherPOJO> getCurrentWeather(@Query("q") String city);
 }

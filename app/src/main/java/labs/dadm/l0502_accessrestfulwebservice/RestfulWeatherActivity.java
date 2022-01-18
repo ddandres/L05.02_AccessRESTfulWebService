@@ -127,7 +127,7 @@ public class RestfulWeatherActivity extends AppCompatActivity {
                     builder.appendPath("2.5");
                     builder.appendPath("weather");
                     // As being a GET request, include the parameters on the URI
-                    builder.appendQueryParameter("APPID", "879247f3f3bda41f02246d88e5b6deaa");
+                    builder.appendQueryParameter("APPID", "MY_API_KEY");
                     builder.appendQueryParameter("mode", "json");
                     builder.appendQueryParameter("units", "metric");
                     builder.appendQueryParameter("q", etCity.getText().toString());
